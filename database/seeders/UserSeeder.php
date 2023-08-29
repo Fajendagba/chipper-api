@@ -7,13 +7,15 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
+    public const UserSeedCount = 5;
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
         User::factory()
-            ->count(5)
+            ->count(self::UserSeedCount)
             ->create();
     }
 }

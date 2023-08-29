@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'json-user-import' => [
+        'url' => env('JSON_USER_IMPORT_URL'),
+        'default_limit' => env('JSON_USER_IMPORT_DEFAULT_LIMIT', 1)
+    ]
+
 ];

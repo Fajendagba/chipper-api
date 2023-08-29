@@ -14,6 +14,7 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'body' => $this->body,
             'user' => new UserResource($this->user),
+            'photo' => $this->photo
         ];
     }
 }

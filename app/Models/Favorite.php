@@ -4,21 +4,39 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Favorite extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['post_id', 'user_id'];
+    public const TYPE_POST = 'post';
+    public const TYPE_USER = 'user';
+    public const TYPES = [
+        self::TYPE_POST,
+        self::TYPE_USER,
+    ];
 
-    public function user(): BelongsTo
+
+    protected $fillable = ['favoritable_id', 'favoritable_type', 'user_id'];
+
+    public static function boot()
     {
-        return $this->belongsTo(User::class);
+        parent::boot();
+        static::creating(function ($favorite) {
+            if (is_null($favorite->user_id)) {
+                $favorite->user_id = auth()->id();
+            }
+        });
     }
 
-    public function posts(): BelongsTo
+    /**
+     * Define the reverse of the polymorphic relationship for favorites
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function favoritable(): MorphTo
     {
-        return $this->belongsTo(Post::class, 'post_id');
+        return $this->morphTo();
     }
 }

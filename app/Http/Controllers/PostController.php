@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PostResource;
 use App\Models\Post;
-use App\Http\Requests\CreatePostRequest;
-use App\Http\Requests\UpdatePostRequest;
-use App\Http\Requests\DestroyPostRequest;
+use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
+use App\Http\Requests\Post\DestroyPostRequest;
+use App\Jobs\PostNotificationJob;
 
 /**
  * @group Posts
@@ -25,12 +26,19 @@ class PostController extends Controller
     {
         $user = $request->user();
 
+        if ($request->photo) {
+            $path = $request->file('photo')->store('photos');
+        }
+
         // Create a new post
         $post = Post::create([
             'title' => $request->input('title'),
             'body' => $request->input('body'),
             'user_id' => $user->id,
+            'image_url' => $path ?? null
         ]);
+
+        PostNotificationJob::dispatch($user);
 
         return new PostResource($post);
     }

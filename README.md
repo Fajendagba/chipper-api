@@ -5,27 +5,31 @@ Welcome, developer!
 This is the repository of the REST API of _Chipper_, a fictional microblogging application. It has the following features:
 
 ### Registration
-- A guest can register
+
+-   A guest can register
 
 ### Authentication
-- A user can login with email and password
-- A users can not authenticate with an invalid password
-- A user can get his session
-- A guest can not get his session
-- A user can logout
+
+-   A user can login with email and password
+-   A users can not authenticate with an invalid password
+-   A user can get his session
+-   A guest can not get his session
+-   A user can logout
 
 ### Favorite
-- A guest can not favorite a post
-- A user can favorite a post
-- A user can remove a post from his favorites
-- A user can not remove a non favorited item
+
+-   A guest can not favorite a post
+-   A user can favorite a post
+-   A user can remove a post from his favorites
+-   A user can not remove a non favorited item
 
 ### Post
-- A guest can not create a post
-- A user can create a post
-- A user can update a post
-- A user can not update a post by other user
-- A user can destroy one of his posts
+
+-   A guest can not create a post
+-   A user can create a post
+-   A user can update a post
+-   A user can not update a post by other user
+-   A user can destroy one of his posts
 
 As part of our interview process, we'd like to invite you to tackle a technical challenge and share your solution with us. Are you ready? Let's get started!
 
@@ -45,7 +49,7 @@ Once you are ready, proceed to address the following tasks one by one.
 
 ## 1. Add the ability for users to favorite users
 
-At present, users have the option to mark posts as favorites. 
+At present, users have the option to mark posts as favorites.
 
 The goal of this task is to expand this functionality to allow users to also designate their favorite _users_. Imagine this as a "follow" feature.
 
@@ -66,15 +70,15 @@ Make sure a user can't favorite himself.
 
 > Please update the following line in this `README.md` file to include your estimate of the time required for completion.
 
-Estimated Time Required: [Your Estimate Here]
+Estimated Time Required: 30 mins
 
 > After updating the estimate and right before you start coding, commit your changes using the following command:
-`git add README.md && git commit -m "Task 1 estimated" && git push`
+> `git add README.md && git commit -m "Task 1 estimated" && git push`
 
 🏁 **ONCE YOU HAVE COMPLETED THE TASK**
 
 > After implementing the changes, commit your work using the following commands:
-`git add -A && git commit -m "Added the ability for users to favorite authors" && git push`
+> `git add -A && git commit -m "Added the ability for users to favorite authors" && git push`
 
 ## 2. Update the payload of `GET /favorites` to list posts and users
 
@@ -112,15 +116,15 @@ As in the previous task, please make sure to add the relevant tests in `tests/Fe
 
 > Please update the following line in this `README.md` file to include your estimate of the time required for completion.
 
-Estimated Time Required: [Your Estimate Here]
+Estimated Time Required: 30 mins
 
 > After updating the estimate and right before you start coding, commit your changes using the following command:
-`git add README.md && git commit -m "Task 2 estimated" && git push`
+> `git add README.md && git commit -m "Task 2 estimated" && git push`
 
 🏁 **ONCE YOU HAVE COMPLETED THE TASK**
 
 > After implementing the changes, commit your work using the following commands:
-`git add -A && git commit -m "Updated structure of favorites index payload" && git push`
+> `git add -A && git commit -m "Updated structure of favorites index payload" && git push`
 
 ## 3. Notify a user whenever one of their favored users creates a new post.
 
@@ -140,15 +144,15 @@ In addition to the implementation, please ensure comprehensive test coverage for
 
 > Please update the following line in this `README.md` file to include your estimate of the time required for completion.
 
-Estimated Time Required: [Your Estimate Here]
+Estimated Time Required: 25 mins
 
 > After updating the estimate and right before you start coding, commit your changes using the following command:
-`git add README.md && git commit -m "Task 3 estimated" && git push`
+> `git add README.md && git commit -m "Task 3 estimated" && git push`
 
 🏁 **ONCE YOU HAVE COMPLETED THE TASK**
 
 > After implementing the feature, commit your work using the following commands:
-`git add -A && git commit -m "Added notification for users when new post of favorite user is created" && git push`
+> `git add -A && git commit -m "Added notification for users when new post of favorite user is created" && git push`
 
 ## 4. Import users
 
@@ -164,15 +168,15 @@ Ensure that the corresponsing tests are provided for this feature.
 
 > Please update the following line in this `README.md` file to include your estimate of the time required for completion.
 
-Estimated Time Required: [Your Estimate Here]
+Estimated Time Required: 40 mins
 
 > After updating the estimate and right before you start coding, commit your changes using the following command:
-`git add README.md && git commit -m "Task 4 estimated" && git push`
+> `git add README.md && git commit -m "Task 4 estimated" && git push`
 
 🏁 **ONCE YOU HAVE COMPLETED THE TASK**
 
 > After implementing the feature, commit your work using the following commands:
-`git add -A && git commit -m "Added command to import users" && git push`
+> `git add -A && git commit -m "Added command to import users" && git push`
 
 ## EXTRA CREDIT: Add the ability to post images
 
@@ -186,20 +190,18 @@ Once an image is attached, the endpoint should save it appropriately. The URL of
 
 > Please update the following line in this `README.md` file to include your estimate of the time required for completion.
 
-Estimated Time Required: [Your Estimate Here]
+Estimated Time Required: 15 mins
 
 > After updating the estimate and right before you start coding, commit your changes using the following command:
-`git add README.md && git commit -m "Extra Task estimated" && git push`
+> `git add README.md && git commit -m "Extra Task estimated" && git push`
 
 🏁 **ONCE YOU HAVE COMPLETED THE TASK**
 
 > After implementing the changes, commit your work using the following commands:
-`git add -A && git commit -m "Add the ability to post images" && git push`
+> `git add -A && git commit -m "Add the ability to post images" && git push`
 
 # Ready for the next challenge?
 
 Congratulations! You completed the first part of this interview coding challenge. We'll now leave the API behind and enter the front-end realm.
 
 Please go to the front-end codebase and follow the instructions you'll find on the `README`. Thank you and good luck!
-
-

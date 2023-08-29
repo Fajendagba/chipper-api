@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\User\HasFavorites;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,6 +14,9 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+    use HasFavorites;
+
+    public const JSON_IMPORT_LIMIT = 10;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +26,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'password'
     ];
 
     /**
@@ -45,11 +49,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function favorites(): HasMany
-    {
-        return $this->hasMany(Favorite::class);
-    }
-
+    /**
+    * Get the posts for a given user
+    *
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
