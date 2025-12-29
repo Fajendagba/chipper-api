@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Support\Arr;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PostTest extends TestCase
@@ -124,5 +126,60 @@ class PostTest extends TestCase
         $this->assertDatabaseMissing('posts', [
             'id' => $id,
         ]);
+    }
+
+    public function test_user_can_create_post_with_image()
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $image = UploadedFile::fake()->image('test.jpg');
+
+        $response = $this->actingAs($user)->postJson(route('posts.store'), [
+            'title' => 'Post with Image',
+            'body' => 'This post has an image.',
+            'image' => $image,
+        ]);
+
+        $response->assertCreated();
+
+        Storage::disk('public')->assertExists('posts/' . $image->hashName());
+
+        $response->assertJsonStructure([
+            'data' => ['id', 'title', 'body', 'image_url'],
+        ]);
+
+        $this->assertNotNull($response->json('data.image_url'));
+    }
+
+    public function test_user_can_create_post_without_image()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->postJson(route('posts.store'), [
+            'title' => 'Post without Image',
+            'body' => 'This post has no image.',
+        ]);
+
+        $response->assertCreated();
+
+        $this->assertNull($response->json('data.image_url'));
+    }
+
+    public function test_image_validation_rejects_invalid_types()
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->create('document.txt', 100);
+
+        $response = $this->actingAs($user)->postJson(route('posts.store'), [
+            'title' => 'Post with Invalid File',
+            'body' => 'This should fail.',
+            'image' => $file,
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['image']);
     }
 }
