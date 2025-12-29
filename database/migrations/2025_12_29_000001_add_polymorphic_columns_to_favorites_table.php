@@ -56,11 +56,21 @@ return new class () extends Migration {
             Schema::drop('favorites');
             Schema::rename('favorites_new', 'favorites');
         } else {
+            DB::statement('DELETE FROM favorites WHERE post_id IS NULL');
+
+            Schema::table('favorites', function (Blueprint $table) {
+                $table->dropForeign(['user_id']);
+            });
+
             Schema::table('favorites', function (Blueprint $table) {
                 $table->dropUnique('favorites_user_favoritable_unique');
-                $table->dropIndex(['favoritable_type', 'favoritable_id']);
+                $table->dropIndex('favorites_favoritable_type_favoritable_id_index');
                 $table->dropColumn(['favoritable_id', 'favoritable_type']);
+            });
+
+            Schema::table('favorites', function (Blueprint $table) {
                 $table->unsignedBigInteger('post_id')->nullable(false)->change();
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             });
         }
     }

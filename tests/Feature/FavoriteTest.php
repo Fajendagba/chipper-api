@@ -135,4 +135,45 @@ class FavoriteTest extends TestCase
         $this->postJson(route('favorites.store.user', ['user' => $user]))
             ->assertUnauthorized();
     }
+
+    public function test_favorites_index_returns_correct_structure()
+    {
+        $user = User::factory()->create();
+        $postAuthor = User::factory()->create();
+        $post = Post::factory()->create(['user_id' => $postAuthor->id]);
+        $favoritedUser = User::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('favorites.store', ['post' => $post]));
+
+        $this->actingAs($user)
+            ->postJson(route('favorites.store.user', ['user' => $favoritedUser]));
+
+        $response = $this->actingAs($user)
+            ->getJson(route('favorites.index'))
+            ->assertOk();
+
+        $response->assertJsonStructure([
+            'data' => [
+                'posts' => [
+                    '*' => ['id', 'title', 'body', 'user' => ['id', 'name']],
+                ],
+                'users' => [
+                    '*' => ['id', 'name'],
+                ],
+            ],
+        ]);
+
+        $response->assertJsonPath('data.posts.0.id', $post->id);
+        $response->assertJsonPath('data.posts.0.title', $post->title);
+        $response->assertJsonPath('data.posts.0.body', $post->body);
+        $response->assertJsonPath('data.posts.0.user.id', $postAuthor->id);
+        $response->assertJsonPath('data.posts.0.user.name', $postAuthor->name);
+
+        $response->assertJsonPath('data.users.0.id', $favoritedUser->id);
+        $response->assertJsonPath('data.users.0.name', $favoritedUser->name);
+
+        $response->assertJsonMissing(['email' => $postAuthor->email]);
+        $response->assertJsonMissing(['email' => $favoritedUser->email]);
+    }
 }

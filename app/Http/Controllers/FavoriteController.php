@@ -6,7 +6,6 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateFavoriteRequest;
-use App\Http\Resources\FavoriteResource;
 use Illuminate\Http\Response;
 
 /**
@@ -18,8 +17,40 @@ class FavoriteController extends Controller
 {
     public function index(Request $request)
     {
-        $favorites = $request->user()->favorites;
-        return FavoriteResource::collection($favorites);
+        $favorites = $request->user()->favorites()
+            ->with(['favoritable' => function ($morphTo) {
+                $morphTo->morphWith([
+                    Post::class => ['user'],
+                ]);
+            }])
+            ->get();
+
+        $postFavorites = $favorites->where('favoritable_type', Post::class);
+        $userFavorites = $favorites->where('favoritable_type', User::class);
+
+        return response()->json([
+            'data' => [
+                'posts' => $postFavorites->map(function ($favorite) {
+                    $post = $favorite->favoritable;
+                    return [
+                        'id' => $post->id,
+                        'title' => $post->title,
+                        'body' => $post->body,
+                        'user' => [
+                            'id' => $post->user->id,
+                            'name' => $post->user->name,
+                        ],
+                    ];
+                })->values(),
+                'users' => $userFavorites->map(function ($favorite) {
+                    $user = $favorite->favoritable;
+                    return [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                    ];
+                })->values(),
+            ],
+        ]);
     }
 
     public function store(CreateFavoriteRequest $request, Post $post)
