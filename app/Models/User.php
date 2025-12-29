@@ -60,4 +60,12 @@ class User extends Authenticatable
     {
         return $this->morphMany(Favorite::class, 'favoritable');
     }
+
+    public function followers()
+    {
+        return User::whereHas('favorites', function ($query) {
+            $query->where('favoritable_type', self::class)
+                  ->where('favoritable_id', $this->id);
+        });
+    }
 }

@@ -7,6 +7,8 @@ use App\Models\Post;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Requests\DestroyPostRequest;
+use App\Notifications\NewPostFromFollowedUser;
+use Illuminate\Support\Facades\Notification;
 
 /**
  * @group Posts
@@ -31,6 +33,9 @@ class PostController extends Controller
             'body' => $request->input('body'),
             'user_id' => $user->id,
         ]);
+
+        $followers = $user->followers()->get();
+        Notification::send($followers, new NewPostFromFollowedUser($post));
 
         return new PostResource($post);
     }
